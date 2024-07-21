@@ -38,6 +38,7 @@ export default function Home() {
           priority
         />
       </div>
+        <h1 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500 dark:from-sky-900 dark:to-[#0141ff]"> ЗДАРОВА ПАЦАНЫ</h1>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a
