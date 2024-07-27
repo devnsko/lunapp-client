@@ -7,7 +7,7 @@ export default function Home() {
           <h1 className="text-center title h1">Welcome to Lunapp!🌌</h1>
           <div className="d-flex justify-content-center mt-5">
             <Link className="btn btn-light me-3" href="/photoofday">Picture of Day</Link>
-            <Link className="btn btn-dark disabled" href="/near">Near Earth Objects</Link>
+            <Link className="btn btn-dark" style={{backgroundColor: '#077fdc'}} href="/near?year=2020">Near Earth Objects</Link>
           </div>
         </main>
   );

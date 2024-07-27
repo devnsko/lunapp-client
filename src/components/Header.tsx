@@ -10,7 +10,7 @@ const Header: React.FC = () => {
                 <Link className="btn btn-dark mx-auto p-2" href="/" role="button">Lunapp</Link>
                 <div>
                     <Link className="link-dark link-offset-2 link-underline-opacity-25 mx-auto p-2" href="/photoofday" role="button">Apod</Link>
-                    <Link className="link-dark link-offset-2 link-underline-opacity-25 mx-auto p-2" href="/near" role="button">Neo</Link>
+                    <Link className="link-dark link-offset-2 link-underline-opacity-25 mx-auto p-2" href="/near?year=2020" role="button">Neo</Link>
                 </div>
             </div>
             <form className="d-flex" role="search">

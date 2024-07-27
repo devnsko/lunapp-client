@@ -1,64 +1,108 @@
 'use client';
 
 import Image from "next/image";
-import { fetchData } from "@/tools/api";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import Calendar from "react-calendar";
 
-// export const revalidate = 3600;
+type ApodData = {
+  id: number;
+  title: string;
+  date: string;
+  explanation: string;
+  media_type: string;
+  hdurl: string;
+  url: string;
+} 
 
 export default function Page() {
+  const [loading, setLoading] = useState<boolean>(false);
   const params = useSearchParams();
-  const dateParam = params.get('date') ?? new Date().toISOString().split('T')[0];
-  const [value, onChange] = useState(new Date());
-  const [data, setData] = useState<{ title: string; date: string; hdurl: string; explanation: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState<string>(params.get('date') || '');
+  const [apod, setApod] = useState<ApodData | null>(null);
+  const getAPOD = async (date: string = '') => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost:5000/today${date ? `?date=${date}` : ''}`, {
+        method: 'GET',
+        next: {
+          revalidate: 24 * 60 * 60 * 1000,
+        }
+      });
+
+      if (response.ok){
+        const data = await response.json();
+        if (data) {
+          setApod(data as ApodData);
+        }
+      }      
+    } catch (error) {
+      console.error('🚀!!! [APOD] Failed to fetch photo of the day', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDataAsync = async () => {
-      console.log('Fetching data for date:', dateParam);
-      const fetchedData = await fetchData(`/today?date=${dateParam}`);
-      setData(fetchedData);
-      setLoading(false);
-    };
+    getAPOD(date);
+  }, [date]);
 
-    fetchDataAsync();
-  }, [dateParam]);
-
-  if (loading) {
-    return (
-      <div className="spinner-border position-absolute top-50 start-50 translate-middle" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-    );
+  let previousDay = () => {
+    const d = new Date(date || new Date());
+    d.setDate(d.getDate() - 1);
+    return d?.toISOString().split('T')[0];
   }
 
-  if (!data) {
-    return (
-      <div className="spinner-border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-    );
+  let nextDay = () => {
+    const d = new Date(date || new Date());
+    d.setDate(d.getDate() + 1);
+    return d?.toISOString().split('T')[0];
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="position-absolute top-50 start-50 translate-middle">
-        <p className="text-center">{data.date.split('T')[0]}</p>
-        <h1 className="text-center h3">{data.title}</h1>
+      <h1 className="text-center h3">Photo of the Day</h1>
+        {loading 
+        ? <p className="text-center">Loading...</p>
+        : apod && <>
+        <p className="text-center">
+        {date != '1995-06-20' && (<a className="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={`/photoofday?date=${previousDay()}`} role="button">{'<— '}</a>)}
+          {apod.date.split('T')[0]}
+        {!new Date().toISOString().startsWith(date) && (<a className="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={`/photoofday?date=${nextDay()}`} role="button">{' —>'}</a>)}
+
+          </p>
+          <h1 className="text-center h3">{apod.title}</h1>
+          <div className="flex flex-col items-center mx-auto p-3">
+            <a href={apod.hdurl}>
+            <Image
+              className="align-middle"
+              src={apod.url}
+              alt="Next.js Logo"
+              width={740}
+              height={148}
+              priority
+              />
+              </a>
+          </div>
+          <p className="text-center">{apod.explanation}</p>
+              </>  
+      }
+      </div>
+    </main>
+  );
+}
+
+{/* <p className="text-center">{photo.data.date.split('T')[0]}</p>
+        <h1 className="text-center h3">{photo.data.title}</h1>
         <div className="flex flex-col items-center mx-auto p-3">
           <Image
             className="align-middle"
-            src={data.hdurl}
+            src={photo.data.url}
             alt="Next.js Logo"
             width={740}
             height={148}
             priority
             />
         </div>
-        <p className="text-center">{data.explanation}</p>
-      </div>
-    </main>
-  );
-}
+        <p className="text-center">{photo.data.explanation}</p> */}
