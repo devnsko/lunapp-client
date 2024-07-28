@@ -10,7 +10,7 @@ type ApodData = {
   date: string;
   explanation: string;
   media_type: string;
-  hdurl: string;
+  hdurl?: string;
   url: string;
 } 
 
@@ -74,15 +74,22 @@ export default function Page() {
           </p>
           <h1 className="text-center h3">{apod.title}</h1>
           <div className="flex flex-col items-center mx-auto p-3">
-            <a href={apod.hdurl}>
-            <Image
-              className="align-middle"
-              src={apod.url}
-              alt="Next.js Logo"
-              width={740}
-              height={148}
-              priority
-              />
+            <a href={apod.hdurl ?? apod.url ?? "#"}  target="_blank">
+              {
+              apod.media_type === 'video' ?
+              <video controls className="align-middle" width={768} height={452} >
+                <source src={apod.url} />
+                Your browser does not support the video tag...
+              </video>
+              : apod.media_type === 'image' && 
+                <Image
+                className="align-middle"
+                src={apod.url}
+                alt="Next.js Logo"
+                width={740}
+                height={148}
+                priority />
+              } 
               </a>
           </div>
           <p className="text-center">{apod.explanation}</p>
