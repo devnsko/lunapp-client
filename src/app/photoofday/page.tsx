@@ -22,7 +22,7 @@ export default function Page() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/today${date ? `?date=${date}` : ''}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/today${date ? `?date=${date}` : ''}`, {
       method: 'GET',
       next: {
         revalidate: 24 * 60 * 60 * 1000,

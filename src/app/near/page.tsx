@@ -38,12 +38,9 @@ export default function Page() {
   const [year, setYear] = useState<string>(params.get('year') || '2020');
   const [neo, setNeo] = useState<NeoData | null>(null);
 
-  
-      
-
   useEffect(() => {
     setLoading(true);
-      fetch(`http://localhost:5000/near?year=${year ? year : 2020}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/near?year=${year ? year : 2020}`, {
         method: 'GET',
         next: {
           revalidate: 24 * 60 * 60 * 1000,
