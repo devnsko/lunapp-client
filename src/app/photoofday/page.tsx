@@ -19,32 +19,28 @@ export default function Page() {
   const params = useSearchParams();
   const [date, setDate] = useState<string>(params.get('date') || '');
   const [apod, setApod] = useState<ApodData | null>(null);
-  const getAPOD = async (date: string = '') => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:5000/today${date ? `?date=${date}` : ''}`, {
-        method: 'GET',
-        next: {
-          revalidate: 24 * 60 * 60 * 1000,
-        }
-      });
-
-      if (response.ok){
-        const data = await response.json();
-        if (data) {
-          setApod(data as ApodData);
-        }
-      }      
-    } catch (error) {
-      console.error('🚀!!! [APOD] Failed to fetch photo of the day', error);
-    }
-    finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    getAPOD(date);
+    setLoading(true);
+    fetch(`http://localhost:5000/today${date ? `?date=${date}` : ''}`, {
+      method: 'GET',
+      next: {
+        revalidate: 24 * 60 * 60 * 1000,
+      }
+    })
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok!!!');
+      }
+      const data = await response.json();
+      if (data) {
+        setApod(data as ApodData);
+        setLoading(false);
+      }
+    })
+    .catch((error) => {
+      console.error('🚀!!! [APOD] Failed to fetch photo of the day', error);
+    });
   }, [date]);
 
   let previousDay = () => {

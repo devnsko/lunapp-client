@@ -38,32 +38,27 @@ export default function Page() {
   const [year, setYear] = useState<string>(params.get('year') || '2020');
   const [neo, setNeo] = useState<NeoData | null>(null);
 
-  const getNEO = async (year: string = '') => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:5000/near?year=${year ? year : 2020}`, {
+  
+      
+
+  useEffect(() => {
+    setLoading(true);
+      fetch(`http://localhost:5000/near?year=${year ? year : 2020}`, {
         method: 'GET',
         next: {
           revalidate: 24 * 60 * 60 * 1000,
         }
-      });
-
-      if (response.ok){
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok!!!');
+        }
         const data = await response.json();
         if (data) {
-            setNeo(data as NeoData);
+          setNeo(data as NeoData);
+          setLoading(false);
         }
-      }      
-    } catch (error) {
-      console.error('🚀!!! [NEO] Failed to fetch neo', error);
-    }
-    finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getNEO(year);
+      })
   }, [year]);
 
   return (
