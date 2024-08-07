@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личная страница программиста</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c34;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        p {
+            font-size: 1.2em;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        .content {
+            max-width: 800px;
+            padding: 30px;
+            background-color: #3b3f47;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .photo-gallery img {
+            max-width: 48%;
+            flex: 1 1 48%;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .photo-gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Привет, я программист!</h1>
+    <p>Горю желанием менять мир и улучшать/спасать жизни людей.</p>
+</header>
+
+<div class="content">
+    <h2>Обо мне</h2>
+    <p>Я программист с пелёнок, посвятивший свою жизнь разработке программного обеспечения. Моя цель — создавать технологии, которые действительно влияют на жизнь людей.</p>
+
+    <div class="photo-gallery">
+        <img src="your-photo.jpg" alt="Мое фото">
+        <img src="workspace.jpg" alt="Мое рабочее пространство">
+        <img src="project1.jpg" alt="Моя работа 1">
+        <img src="project2.jpg" alt="Моя работа 2">
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 Личная страница программиста</p>
+</footer>
+
+</body>
+</html>
